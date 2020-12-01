@@ -1,0 +1,213 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import networkx as nx\n",
+    "import matplotlib.pyplot as plt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.read_csv('/Users/nguyenquangminhnguyet/Documents/Exxonedges-copy_1.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "graph = nx.from_pandas_edgelist(df, source = 'Vertex 1', target = \n",
+    "'Vertex 2', edge_attr = 'Relationship',create_using = nx.DiGraph())\n",
+    "plt.figure(figsize = (10,9))\n",
+    "nx.draw(graph, node_size=500, node_color='lightgreen',\n",
+    "linewidths=0.25, font_size=10, font_weight='bold', with_labels=True, \n",
+    "dpi=1000)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "graph.number_of_edges(u=None, v=None)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "graph.number_of_nodes()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "g = nx.path_graph(5)\n",
+    "print(g.degree([0, 1]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "graph.nodes()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "degCent = nx.degree_centrality(graph)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "degCent"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "collections = pd.DataFrame.from_dict(degCent, orient ='index').transpose()# create data table\n",
+    "print(collections.info())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "collections.to_csv('/Users/nguyenquangminhnguyet/Documents/CSV/degreecentrality2.csv', index=False)#export to file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "indegCent = nx.in_degree_centrality(graph)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "indegCent = nx.out_degree_centrality(graph)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "closeCent =nx.closeness_centrality(graph)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "closeCent = pd.DataFrame.from_dict(closeCent, orient ='index').transpose()\n",
+    "print(closeCent.info())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "closeCent.to_csv('/Users/nguyenquangminhnguyet/Documents/CSV/closenesscentrality2.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "btwnCent = nx.betweenness_centrality(graph, endpoints = False,\n",
+    "                                        normalized = True,\n",
+    "                                        k = 10) \n",
+    "\n",
+    "import operator\n",
+    "sorted(btwnCent.items(), key=operator.itemgetter(1), reverse = True)[0:5]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "btwnCent = pd.DataFrame.from_dict(btwnCent, orient ='index').transpose()\n",
+    "print(btwnCent.info())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "btwnCent.to_csv('/Users/nguyenquangminhnguyet/Documents/CSV/betweennesscentrality4.csv', index=False)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
