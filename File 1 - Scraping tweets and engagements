@@ -1,0 +1,73 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 102,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import tweepy\n",
+    "import pandas as pd\n",
+    "import datetime\n",
+    "\n",
+    "consumer_key = \"xxxxxxxxx\"\n",
+    "consumer_secret = \"xxxxxxxx\"\n",
+    "access_token = \"xxxxxxxxx\"\n",
+    "access_token_secret = \"xxxxxxxxx\"\n",
+    "auth = tweepy.OAuthHandler(consumer_key, consumer_secret)\n",
+    "auth.set_access_token(access_token, access_token_secret)\n",
+    "api = tweepy.API(auth,wait_on_rate_limit=True)\n",
+    "\n",
+    "username = ' @abc  '\n",
+    "startDate = datetime.datetime(yyyy, mm, dd, 0, 0, 0)\n",
+    "endDate =   datetime.datetime(yyyy, mm, dd, 0, 0, 0)\n",
+    "\n",
+    "tweets = []\n",
+    "tmpTweets = api.user_timeline(username)\n",
+    "for tweet in tmpTweets:\n",
+    "    if tweet.created_at < endDate and tweet.created_at > startDate:\n",
+    "        tweets.append(tweet)\n",
+    "\n",
+    "while (tmpTweets[-1].created_at > startDate):\n",
+    "    tmpTweets = api.user_timeline(username, max_id = tmpTweets[-1].id)\n",
+    "    for tweet in tmpTweets:\n",
+    "        if tweet.created_at < endDate and tweet.created_at > startDate:\n",
+    "            tweets.append(tweet)\n",
+    " \n",
+    "tweets_list = [[tweet.text, tweet.created_at, tweet.id_str, tweet.retweet_count, tweet.favorite_count] for tweet in tweets]\n",
+    " \n",
+    "tweets_df = pd.DataFrame(tweets_list,columns=['Tweet Text', 'Tweet Datetime', 'Tweet Id', 'Retweets', 'Favorites'])\n",
+    "\n",
+    "tweets_df.to_csv(path_or_buf = '/filepath.csv', index=False)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
